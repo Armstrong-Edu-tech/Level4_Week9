@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>User Management</title>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <style>
+    body { font-family: sans-serif; background: #f5f5f5; text-align: center; margin-top: 40px; }
+    .container { background: white; padding: 20px; width: 400px; margin: auto; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+    input { width: 90%; padding: 8px; margin: 8px 0; border: 1px solid #ccc; border-radius: 4px; }
+    button { background: #42b983; color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; margin: 5px;}
+    ul { list-style: none; padding: 0; }
+    li { background: #e9f6ef; margin: 5px 0; padding: 8px; border-radius: 5px; }
+  </style>
+</head>
+<body>
+  <div id="app" class="container">
+    <h2>User Management</h2>
+
+    <input v-model="name" placeholder="Name" />
+    <input v-model="email" placeholder="Email" />
+    <input v-model="password" placeholder="Password" type="password" />
+    <button @click="registerUser">Register</button>
+    <button @click="fetchUsers">Show Users</button>
+
+    <ul>
+      <li v-for="user in users" :key="user._id">{{ user.name }} - {{ user.email }}</li>
+    </ul>
+  </div>
+
+  <script>
+    const { createApp } = Vue;
+
+    createApp({
+      data() {
+        return {
+          name: "", email: "", password: "", users: []
+        };
+      },
+      methods: {
+        async registerUser() {
+          await fetch("http://localhost:3000/users", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ name: this.name, email: this.email, password: this.password })
+          });
+          this.name = this.email = this.password = "";
+          this.fetchUsers();
+        },
+        async fetchUsers() {
+          const res = await fetch("http://localhost:3000/users");
+          this.users = await res.json();
+        }
+      }
+    }).mount("#app");
+  </script>
+</body>
+</html>
