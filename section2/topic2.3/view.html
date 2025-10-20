@@ -1,0 +1,31 @@
+<script>
+    const { createApp } = Vue;
+    createApp({
+        data() {
+            return {
+                registerData: { name: "", email: "", password: "" },
+                loginData: { email: "", password: "" } -
+};
+        },
+        methods: {
+            async register() {
+                const result = await fetch('endpoint', {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(this.registerData)
+                });
+                const data = await result.json();
+                console.log(data);
+            },
+            async login() {
+                const result = await fetch('endpoint', {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(this.loginData)
+                });
+                const data = await result.json();
+                console.log(data);
+            }
+        }
+    }).mount('#app');
+</script>
