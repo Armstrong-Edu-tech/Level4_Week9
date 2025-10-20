@@ -1,0 +1,3 @@
+import userRoutes from './routes/userRoutes.js'; // Default import
+// ... express app initialization ...
+app.use(userRoutes); // Use the user routes
