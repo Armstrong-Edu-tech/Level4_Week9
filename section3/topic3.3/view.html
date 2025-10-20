@@ -1,0 +1,35 @@
+<script>
+    const { createApp } = Vue;
+    createApp({
+        data() {
+            return {
+                users: [],
+                form: { name: '', email: '', password: '' }
+            };
+        },
+        methods: {
+            async fetchUsers() {
+                try {
+                    const res = await fetch('/api/users');
+                    this.users = await res.json();
+                } catch (error) {
+                    console.log('erorr fetching', error);
+
+                }
+            },
+            async addUser() {
+                try {
+                    await fetch('/api/users', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(this.form)
+                    });
+                    this.form = { name: '', email: '', password: '' }
+                } catch (error) {
+                    console.log('erorr fetching', error);
+
+                }
+            }
+        }
+    }).mount('#app');
+</script>
